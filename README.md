@@ -4,7 +4,7 @@ Talk at the GIW/InCoB Meeting on 2015-09-09 in Tokyo, Japan. Session: [Bioconduc
 
 Want to see the slides?
 
-- A properly rendered version of the HTML is in this repo: [2015-09-09_bioconductor-dna-methylation.html](http://htmlpreview.github.io/?https://github.com/PeteHaitch/2015-09-09_bioconductor-dna-methylation/blob/master/2015-09-09_bioconductor-dna-methylation.html#1)
+- A properly rendered version of the HTML slides in this repo: [2015-09-09_bioconductor-dna-methylation.html](http://htmlpreview.github.io/?https://github.com/PeteHaitch/2015-09-09_bioconductor-dna-methylation/blob/master/2015-09-09_bioconductor-dna-methylation.html)
 
 # Links
 
