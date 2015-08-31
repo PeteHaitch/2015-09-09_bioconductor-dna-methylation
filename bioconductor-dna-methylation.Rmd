@@ -1,0 +1,214 @@
+---
+title: "Analysing DNA methylation data with Bioconductor"
+author: "Peter Hickey ([@PeteHaitch](https://github.com/PeteHaitch/))"
+date: "9 September 2015"
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = "#>")
+library(biocViews)
+library(BiocInstaller)
+```
+
+# Introduction
+
+## Basic biology
+
+- Pictures of 5mC, r'ship b/n mC and gene expression.
+
+## Assays
+
+- Focusing on modern high-throughput assays
+- 450k, WGBS, RRBS, [MeDIP,MRE,etc.]-seq
+
+## The analysis pipeline
+
+__TODO: Make this slide into a picture (a line with "most specific" at one end and "least specific" at the other)__
+
+Most assay-specific:
+
+> - Getting data into R
+> - Pre-processing
+> - Analysis
+
+Somewhere in between:
+
+> - Batch effects
+
+Less assay-specific:
+
+> - Visualisation
+> - Data integration
+
+## How can Bioconductor help?
+
+```{r methylation-bioc-pkgs, warning = FALSE}
+data("biocViewsVocab")
+# Get all biocViews
+bioc_views <- lapply(X = BiocInstaller::biocinstallRepos()[1:4],
+                     FUN = biocViews::getBiocViews,
+                     vocab = biocViewsVocab,
+                     defaultView = "NoViewProvided")
+dna_methylation <- lapply(X = bioc_views,
+                          FUN = function(bcv) bcv$DNAMethylation@packageList)
+```
+
+Bioconductor `r BiocInstaller::biocVersion()` packages (based on DNAMethylation [_BiocViews_](http://www.bioconductor.org/packages/release/BiocViews.html)):
+
+> - `r length(dna_methylation[["BioCsoft"]])` software packages
+> - `r length(dna_methylation[["BioCann"]])` annotation packages
+
+## Manual package curation
+
+__TODO: Working notes, not an actual slide__
+
+Software: 
+
+- Microarrays
+  - charm
+  - conumee
+  - CopyNumber450k
+  - DMRcate
+  - DMRforPairs
+  - ENmix
+  - lumi
+  - MethylAid
+  - MethylMix
+  - methylumi
+  - minfi
+  - missMethyl
+  - shinyMethyl
+  - skewr
+  - wateRmelon
+- Sequencing
+  - Bisulfite-sequencing
+  - BiSeq
+  - bsseq
+  - DMRcaller
+  - DSS
+  - M3D
+  - methylPipe
+  - MethylSeekR
+  - MPFE
+- Misc.
+  - BEclear
+  - bumphunter
+  - COHCAP
+  - coMET
+  - MassArray
+  - MEDIPS
+  - MEDME
+  - methVisual
+  - methyAnalysis
+  - methylMnM
+  - Repitools
+  - RnBeads
+  
+# Microarrays
+
+## Description of assays
+
+[Illumina 27k](https://en.wikipedia.org/wiki/Illumina_Methylation_Assay)
+
+- Infinium HumanMethylation27 BeadChip
+- Deprecated? No longer advertised on Illumina's website
+- Much of TCGA data uses this platform
+- Infinium I probes also on 450k
+
+[Illumina 450k](http://www.biostat.jhsph.edu/~lcollado/misc/genomics/GWG_JPF.pdf)
+
+- Infinium HumanMethylation450 BeadChip
+
+## Key packages
+
+## Analysis pipeline
+
+Schematic of data generation + analysis pipeline
+
+- Data format and ingest
+- Pre-processing
+  - Normalisation
+  - CpG-SNPs
+  - CNVs
+- Downstream analyses
+  - $\beta$-values vs. $\mathcal{M}$-values
+  - Smoothing
+  - Differential methylation: DMLs/DMPs, DMRs, kernel based tests
+  - Differential variability
+
+
+# Sequencing
+
+## Description of assays
+
+Bisulfite-sequencing-based assays
+
+- WGBS
+- [e]RRBS
+
+Enrichment-based assays
+
+- MeDIP-seq
+- MREseq
+- Not going to talk about much
+
+## Key packages
+
+## Analysis pipeline
+
+- Non-R stuff: pre-processing, mapping, and post-processing of reads
+  - List popular alignment software
+  - M-bias
+- Data input
+- Pre-processing
+  - CpG-SNPs
+  - CNVs
+  - Normalisation
+- Downstream analyses
+  - Smoothing
+  - Beta-binomial model
+  - Differential methylation: DMLs/DMPs, DMRs, kernel based tests.
+  - Differential variability
+  - Methylation patterns
+
+# Visualisation
+
+## Yup
+
+- epiviz
+- lollipop plots
+
+# Data integration
+
+## Yup 
+
+- AnnotationHub, biomaRt, etc.
+
+# Batch effects and technical biases
+
+## Yup
+
+- Cell composition bias
+
+# Miscellaneous
+
+## Yup
+
+- Single-cell assays
+
+# Links
+
+## Yup
+
+- Workflows
+- Package vignettes
+
+## TODOs
+
+- [ ] Fix up github link on title slide
+- [ ] What are "extra" packages (`BioCextra`)?
+- [ ] Include affiliation on title slide?
+- [ ] Note that this is an opinionated talk
