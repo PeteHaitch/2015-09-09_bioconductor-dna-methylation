@@ -15,14 +15,50 @@ library(BiocInstaller)
 
 # Introduction
 
-## Basic biology
+## Basic biology {.smaller}
 
-- Pictures of 5mC, r'ship b/n mC and gene expression.
+<center><img src="images/5mC.png" height="480px" /></center>
 
-## Assays
+Modified "<a href="https://commons.wikimedia.org/wiki/File:Cytosine_becomes_thymine.png#/media/File:Cytosine_becomes_thymine.png">Cytosine becomes thymine</a>" by <a href="//commons.wikimedia.org/wiki/User:CFCF" title="User:CFCF">CFCF</a> - <span class="int-own-work" lang="en">Own work</span>. Licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.
 
-- Focusing on modern high-throughput assays
-- 450k, WGBS, RRBS, [MeDIP,MRE,etc.]-seq
+## Basic biology {.smaller}
+
+<center><img src="images/Agouti-Mouse-1024x802.jpg" height="480px" /></center>
+
+[http://episona.com/wp-content/uploads/2014/01/Agouti-Mouse-1024x802.jpg
+](http://episona.com/wp-content/uploads/2014/01/Agouti-Mouse-1024x802.jpg
+)
+
+## Basic biology {.smaller}
+
+<center><img src="images/methylation_vs_expression.png" height="480px" /></center>
+
+[Figure S7.1C, Integrated genomic analyses of ovarian carcinoma, TCGA, doi:10.1038/nature10166](www.nature.com/articles/nature10166)
+
+<div class = "notes">
+Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylation. The color and size of the dots represent tissue type (red/large – fallopian tube samples, n=8; black/small – ovarian tumors, n=489). 
+</div>
+
+# Assays
+
+## Assays {.smaller}
+
+Focusing on modern high-throughput assays
+
+### Microarrays
+
+- Illumina 27k
+- Illumina 450k
+
+### Sequencing
+
+- Bisulfite-treatment of DNA
+    - Whole-genome bisulfite-sequencing
+    - (Enhanced/Extended) Reduced representation
+- Other
+    - **M**ethylated DNA **i**mmuno**p**recipitation + sequencing (MeDIP-seq/mDIP-seq)
+    - **M**ethylation-sensitive **r**estriction **e**nzyme + sequencing (MRE-seq)
+    - **M**ethyl **b**inding **d**omain protein-enrichment + sequencing (MBD-seq)
 
 ## The analysis pipeline
 
@@ -67,32 +103,6 @@ __TODO: Working notes, not an actual slide__
 
 Software: 
 
-- Microarrays
-  - charm
-  - conumee
-  - CopyNumber450k
-  - DMRcate
-  - DMRforPairs
-  - ENmix
-  - lumi
-  - MethylAid
-  - MethylMix
-  - methylumi
-  - minfi
-  - missMethyl
-  - shinyMethyl
-  - skewr
-  - wateRmelon
-- Sequencing
-  - Bisulfite-sequencing
-  - BiSeq
-  - bsseq
-  - DMRcaller
-  - DSS
-  - M3D
-  - methylPipe
-  - MethylSeekR
-  - MPFE
 - Misc.
   - BEclear
   - bumphunter
@@ -123,6 +133,24 @@ Software:
 - Infinium HumanMethylation450 BeadChip
 
 ## Key packages
+
+- Microarrays
+  - charm
+  - conumee
+  - CopyNumber450k
+  - DMRcate
+  - DMRforPairs
+  - ENmix
+  - lumi
+  - MethylAid
+  - MethylMix
+  - methylumi
+  - minfi
+  - missMethyl
+  - shinyMethyl
+  - skewr
+  - wateRmelon
+  - __ANNOTATION__
 
 ## Analysis pipeline
 
@@ -156,6 +184,17 @@ Enrichment-based assays
 - Not going to talk about much
 
 ## Key packages
+
+- Sequencing
+  - Bisulfite-sequencing
+  - BiSeq
+  - bsseq
+  - DMRcaller
+  - DSS
+  - M3D
+  - methylPipe
+  - MethylSeekR
+  - MPFE
 
 ## Analysis pipeline
 
@@ -205,10 +244,10 @@ Enrichment-based assays
 
 - Workflows
 - Package vignettes
+- Slides
 
 ## TODOs
 
 - [ ] Fix up github link on title slide
-- [ ] What are "extra" packages (`BioCextra`)?
 - [ ] Include affiliation on title slide?
 - [ ] Note that this is an opinionated talk
