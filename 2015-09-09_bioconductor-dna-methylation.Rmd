@@ -1,19 +1,17 @@
 ---
 title: "Analysing DNA methylation data with Bioconductor"
-author: "Peter Hickey ([@PeteHaitch](https://github.com/PeteHaitch/))"
+author: "Peter Hickey (@PeteHaitch)"
 date: "9 September 2015"
 output: 
   ioslides_presentation:
     widescreen: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, comment = "#>")
 library(biocViews)
 library(BiocInstaller)
 ```
-
-# Introduction
 
 ## Basic biology {.smaller}
 
@@ -39,11 +37,15 @@ Modified "<a href="https://commons.wikimedia.org/wiki/File:Cytosine_becomes_thym
 Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylation. The color and size of the dots represent tissue type (red/large – fallopian tube samples, n=8; black/small – ovarian tumors, n=489). 
 </div>
 
+## Sodium bisulfite treatment of DNA {.flexbox .vcenter .build}
+
+<center><img src="images/bisulfite-conversion.png" height="480px" /></center>
+
 # Assays
 
-## Assays {.smaller}
+## Bisulfite-based assays {.build}
 
-Focusing on modern high-throughput assays
+Going to focus on contemporary high-throughput assays based on __sodium bisulfite treatment of DNA__
 
 ### Microarrays
 
@@ -52,36 +54,38 @@ Focusing on modern high-throughput assays
 
 ### Sequencing
 
-- Bisulfite-treatment of DNA
-    - Whole-genome bisulfite-sequencing
-    - (Enhanced/Extended) Reduced representation
-- Other
-    - **M**ethylated DNA **i**mmuno**p**recipitation + sequencing (MeDIP-seq/mDIP-seq)
-    - **M**ethylation-sensitive **r**estriction **e**nzyme + sequencing (MRE-seq)
-    - **M**ethyl **b**inding **d**omain protein-enrichment + sequencing (MBD-seq)
+- Whole-genome bisulfite-sequencing (WGBS/BS-seq/methylC-seq)
+- (Enhanced/Extended) Reduced representation bisulfite-sequencing (eRRBS/RRBS)
+- Capture + bisulfite-sequencing (Roche SeqCap Epi system)
+    
+## Non-bisulfite assays {.build}
+
+Based on an enrichment/pulldown of methylated DNA and/or restriction enzymes
+
+- **Me**thylated DNA **i**mmuno**p**recipitation + microarray/sequencing (MeDIP-microarray/MeDIP-seq/mDIP-seq)
+- **M**ethylation-sensitive **r**estriction **e**nzyme + sequencing (MRE-seq)
+- **M**ethyl **b**inding **d**omain protein-enrichment + sequencing (MBD-seq)
 
 ## The analysis pipeline
 
-__TODO: Make this slide into a picture (a line with "most specific" at one end and "least specific" at the other)__
-
 Most assay-specific:
 
-> - Getting data into R
-> - Pre-processing
-> - Analysis
+- Getting data into R
+- Pre-processing
+- Analysis
 
 Somewhere in between:
 
-> - Batch effects
+- Batch effects
 
 Less assay-specific:
 
-> - Visualisation
-> - Data integration
+- Visualisation
+- Data integration
 
 ## How can Bioconductor help?
 
-```{r methylation-bioc-pkgs, warning = FALSE}
+```{r methylation-bioc-pkgs, warning = FALSE, cache = TRUE}
 data("biocViewsVocab")
 # Get all biocViews
 bioc_views <- lapply(X = BiocInstaller::biocinstallRepos()[1:4],
@@ -97,78 +101,163 @@ Bioconductor `r BiocInstaller::biocVersion()` packages (based on DNAMethylation 
 > - `r length(dna_methylation[["BioCsoft"]])` software packages
 > - `r length(dna_methylation[["BioCann"]])` annotation packages
 
-## Manual package curation
+## Disclaimer {.build}
 
-__TODO: Working notes, not an actual slide__
+__I can't tell you everything__
 
-Software: 
+- 25 minutes
+- I don't know everything!
 
-- Misc.
-  - BEclear
-  - bumphunter
-  - COHCAP
-  - coMET
-  - MassArray
-  - MEDIPS
-  - MEDME
-  - methVisual
-  - methyAnalysis
-  - methylMnM
-  - Repitools
-  - RnBeads
-  
+__Will tell you:__
+
+- What I find useful as a fairly well-experienced user & developer
+- What I am most familiar with
+- Where to find out more
+
 # Microarrays
 
-## Description of assays
+## Description of assays {.smaller .build}
 
-[Illumina 27k](https://en.wikipedia.org/wiki/Illumina_Methylation_Assay)
+### What these measure
+
+- Red + green fluorescence intensities
+
+<div class="columns-2">
+
+### [Illumina 27k](https://en.wikipedia.org/wiki/Illumina_Methylation_Assay)
 
 - Infinium HumanMethylation27 BeadChip
-- Deprecated? No longer advertised on Illumina's website
-- Much of TCGA data uses this platform
-- Infinium I probes also on 450k
+- ~28,000 cytosines
+- Mostly in promoters of ~15,000 genes
+- Infinium I probes
+- Deprecated? But much of TCGA data uses this platform. 
 
-[Illumina 450k](http://www.biostat.jhsph.edu/~lcollado/misc/genomics/GWG_JPF.pdf)
+### [Illumina 450k](http://www.illumina.com/products/methylation_450_beadchip_kits.html)
 
 - Infinium HumanMethylation450 BeadChip
+- ~486,000 cytosines
+- Promoters, gene bodies, 3' UTR, intergenic
+- 135k Infinium I and 350k Infinium II probes
+- [An overview of 450k technology](http://www.biostat.jhsph.edu/~lcollado/misc/genomics/GWG_JPF.pdf)
+
+</div>
 
 ## Key packages
 
-- Microarrays
-  - charm
-  - conumee
-  - CopyNumber450k
-  - DMRcate
-  - DMRforPairs
-  - ENmix
-  - lumi
-  - MethylAid
-  - MethylMix
-  - methylumi
-  - minfi
-  - missMethyl
-  - shinyMethyl
-  - skewr
-  - wateRmelon
-  - __ANNOTATION__
+### Powerhouses
 
-## Analysis pipeline
+- [_minfi_](http://bioconductor.org/packages/minfi/)
+- [_methylumi_](http://bioconductor.org/packages/methylumi/)
 
-Schematic of data generation + analysis pipeline
+### Pipelines
 
-- Data format and ingest
-- Pre-processing
-  - Normalisation
-  - CpG-SNPs
-  - CNVs
-- Downstream analyses
-  - $\beta$-values vs. $\mathcal{M}$-values
-  - Smoothing
-  - Differential methylation: DMLs/DMPs, DMRs, kernel based tests
-  - Differential variability
+- [_ChAMP_](http://bioconductor.org/packages/ChAMP/)
+- [_RnBeads_](http://bioconductor.org/packages/RnBeads/)
 
+## Data ingest
+
+### File formats
+
+- `.idat` files
+- Files returned by Illumina's BeadStudio
+
+### [_minfi_](http://bioconductor.org/packages/minfi/)
+
+- `read.450k()`, `read.450k.exp()`, `read.450k.sheet()`
+- `readTCGA()`
+- `readGEORawFile()`
+
+## Pre-processing
+
+__Very important__
+
+See [A comprehensive overview of Infinium HumanMethylation450 data processing (2013)](http://bib.oxfordjournals.org/content/15/6/929.long), [minfi User's Guide](http://www.bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.pdf)
+
+## Quality control
+
+<div class="columns-2">
+
+### Static
+
+- `minfi::qcReport()`, `minfi::minfiQC()`
+- [_skewr_](http://bioconductor.org/packages/release/bioc/html/skewr.html)
+
+### Interactive
+
+- [_MethylAid_](http://bioconductor.org/packages/release/bioc/html/MethylAid.html)
+- [_shinyMethyl_](http://bioconductor.org/packages/shinyMethyl/)
+
+<img src="images/shinyMethyl.png" width="400px" />
+
+</div>
+
+## Pre-processing {.build}
+
+### Standard microarray issues
+
+- Failed probes
+- Cross-reactive probes
+- Background correction
+- Colour (dye) bias adjustment
+- Normalisation
+
+### 450k-specific issues
+
+- Type I and II probes are very different
+- CpG-SNPs
+
+### Methylation-specific(ish) issues
+
+- Cell composition artefacts
+
+## Pre-processing {.build}
+
+- Several pre-processing options available in Bioconductor packages and some comparisons published e.g., [wateRmelon](http://bioconductor.org/packages/wateRmelon/)
+
+### Tools
+
+- [_minfi_](http://bioconductor.org/packages/minfi/)
+    - `detectionP()`
+    - `preprocessRaw()`, `preprocessIllumina()`, `preprocessQuantile()`, `preprocessNoob()`,  `preprocessSWAN()`, `preprocessFunnorm()`
+    - `dropLociWithSnps()`
+    - `estimateCellCounts()`
+- [_RUVm_ (remove unwanted variation)](http://www.bioconductor.org/packages/release/bioc/vignettes/missMethyl/inst/doc/missMethyl.pdf) implemented in [_missMethyl_](http://bioconductor.org/packages/missMethyl/)
+- [_CopyNumber450k_](http://bioconductor.org/packages/CopyNumber450k/)
+
+## Downstream analyses {.build}
+
+### $\beta$-values vs. $\mathcal{M}$-values
+
+$\beta = \frac{M}{M + U + 100} \in [0, 1]$
+
+$\mathcal{M} = \log(\frac{M}{U}) \in [-\infty, \infty]$
+
+[Du, P. et al. Comparison of Beta-value and M-value methods for quantifying methylation levels by microarray analysis. BMC Bioinformatics 11, 587 (2010).](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3012676/):
+
+> "We recommend using the $\mathcal{M}$-value method for conducting differential methylation analysis and including the $\beta$-value statistics when reporting the results to investigators."
+
+## Differential methylation {.build}
+
+### Differentially methylated probes (DMPs)
+
+- For a given probe, are the group-average level(s) of methylation different?
+- [_limma_](http://bioconductor.org/packages/limma/) is the workhorse, e.g., `minfi::dmpFinder()`
+- __OPINION__: You want a pretty good reason not to use a _limma_-based approach
+
+### Differentially methylated regions (DMRs)
+
+- Identify _regions_ with different group-average level(s) of methylation
+- __OPINION__: DMR finding/testing is somewhat _ad hoc_, but getting better
+- E.g., see `minfi::blockFinder()` with the `bumphunter::bumphunter()` backend
+
+## Differential variability
+
+- For a given probe, are the within-group variances of methylation levels different?
+- `missMethyl::varFit`, `missMethyl::topVar()` based on [_limma_](http://bioconductor.org/packages/limma/)
 
 # Sequencing
+
+__UP TO HERE__
 
 ## Description of assays
 
@@ -245,9 +334,58 @@ Enrichment-based assays
 - Workflows
 - Package vignettes
 - Slides
+- Conferences (e.g., http://webspace.qmul.ac.uk/rlowe/450kworkshop//index.html)
+- [PH525x series - Biomedical Data Science](http://genomicsclass.github.io/book/)
+- [A comprehensive overview of Infinium HumanMethylation450 data processing](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4239800/)
+- [Evaluation of the Infinium Methylation 450K technology](http://www.ncbi.nlm.nih.gov/pubmed/22126295)
+- [Validation of a DNA methylation microarray for 450,000
+CpG sites in the human genome (pdf)](http://www.tandfonline.com/doi/pdf/10.4161/epi.6.6.16196)
+- [https://www.coursera.org/course/genbioconductor](https://www.coursera.org/course/genbioconductor)
 
 ## TODOs
 
-- [ ] Fix up github link on title slide
 - [ ] Include affiliation on title slide?
 - [ ] Note that this is an opinionated talk
+- [ ] Add authors to key packages?
+
+## Manual package curation
+
+__TODO: Working notes, not an actual slide__
+
+## Key packages
+
+### Microarrays
+
+- BEclear (batch effects)
+- ChAMP
+- charm
+- COHCAP (+ BS-seq)
+- conumee
+- CopyNumber450k
+- DMRcate
+- DMRforPairs
+- ENmix
+- lumi
+- MethylAid
+- MethylMix
+- methylumi
+- minfi
+- missMethyl
+- shinyMethyl
+- skewr
+- wateRmelon
+- __ANNOTATION__
+
+
+### Misc.
+
+- bumphunter (general)
+- coMET (visualisation of EWAS and 'co-methylation LD maps')
+- MassArray (sequenom)
+- MEDIPS (MeDIP-seq)
+- MEDME (MeDIP-microarray)
+- methVisual (clone BS-seq)
+- methyAnalysis (mostly arrays with some seq, same dev as lumi)
+- methylMnM (MeDIP-seq and MRE-seq)
+- Repitools (MeDIP-seq)
+- RnBeads (box and dice, slick pipeline run with "modules", uses other packages)
