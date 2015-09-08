@@ -41,6 +41,8 @@ Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylati
 
 <center><img src="images/bisulfite-conversion.png" height="480px" /></center>
 
+__TODO: Image source and note hydroxy__
+
 # Assays
 
 ## Bisulfite-based assays {.build}
@@ -58,7 +60,7 @@ Going to focus on contemporary high-throughput assays based on __sodium bisulfit
 - (Enhanced/Extended) Reduced representation bisulfite-sequencing (eRRBS/RRBS)
 - Capture + bisulfite-sequencing (Roche SeqCap Epi system)
     
-## Non-bisulfite assays {.build}
+## Non-bisulfite assays
 
 Based on an enrichment/pulldown of methylated DNA and/or restriction enzymes
 
@@ -120,7 +122,7 @@ __Will tell you:__
 
 ### What these measure
 
-- Red + green fluorescence intensities
+- Red + green fluorescence intensities reflecting methylated and unmethylated signal
 
 <div class="columns-2">
 
@@ -257,50 +259,97 @@ $\mathcal{M} = \log(\frac{M}{U}) \in [-\infty, \infty]$
 
 # Sequencing
 
-__UP TO HERE__
-
 ## Description of assays
 
-Bisulfite-sequencing-based assays
+## Description of assays {.smaller .build}
 
-- WGBS
-- [e]RRBS
+### What these measure
 
-Enrichment-based assays
+Single-base resolution of cytosine methylation
 
-- MeDIP-seq
-- MREseq
-- Not going to talk about much
+### Whole-genome bisulfite-sequencing
 
-## Key packages
+- Gold standard
+- Genome-wide assay
+- Expensive
+- 2-30x sequencing coverage
 
-- Sequencing
-  - Bisulfite-sequencing
-  - BiSeq
-  - bsseq
-  - DMRcaller
-  - DSS
-  - M3D
-  - methylPipe
-  - MethylSeekR
-  - MPFE
+### Targeted bisulfite-sequencing
 
-## Analysis pipeline
+- Reduce representation bisulfite-sequencing and SeqCap
+- Cheaper
+- 20-60x sequencing coverage
 
-- Non-R stuff: pre-processing, mapping, and post-processing of reads
-  - List popular alignment software
-  - M-bias
-- Data input
-- Pre-processing
-  - CpG-SNPs
-  - CNVs
-  - Normalisation
-- Downstream analyses
-  - Smoothing
-  - Beta-binomial model
-  - Differential methylation: DMLs/DMPs, DMRs, kernel based tests.
-  - Differential variability
-  - Methylation patterns
+## Key packages {.build}
+
+Still being figured out ...
+
+### __OPINION__
+
+- [_bsseq_](http://bioconductor.org/packages/bsseq/) for whole-genome bisulfite-sequencing
+- [_BiSeq_](http://bioconductor.org/packages/BiSeq/) for reduced representation bisulfite-sequencing
+- [_RnBeads_](http://bioconductor.org/packages/BiSeq/) for comprehensive WGBS/RRBS pipeline
+- Other non-R/Bioconductor options __TODO: Ref Mark's paper__
+
+## Non-R preliminaries {.build}
+
+### Pipeline (including most pre-processing)
+
+- Data QC (e.g., [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+- Read trimming (e.g., [Trim Galore!](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/))
+- Read alignment (e.g., [bismark](http://www.bioinformatics.babraham.ac.uk/projects/bismark/), [bwa-meth](https://github.com/brentp/bwa-meth))
+- Methylation calling (e.g., aligner-supplied software, [_Bis-SNP_](http://www.genomebiology.com/2012/13/7/R61), [_methtuple_](https://github.com/PeteHaitch/methtuple))
+
+### Input to Bioconductor
+
+- Some aligner-specific file format with the following data per-sample:
+
+```
+chr  pos M  U
+chr7 666 13 2
+chr7 685 12 0
+```
+
+## Pre-processing {.build}
+
+- Most done prior to reading data into R
+- More that ought to probably be done
+
+### Some issues
+
+- CpGs overlapping genetic variants
+- Copy number variation
+- Normalisation (nothing much yet available)
+
+## Smoothing $\beta$-values {.smaller}
+
+<center><img src="images/smoothing-1.png" height="480px" /></center>
+
+__Cartoon__ (see e.g., `bsseq::BSmooth()` for a proper implementation)
+
+## Smoothing $\beta$-values {.smaller}
+
+<center><img src="images/smoothing-2.png" height="480px" /></center>
+
+__Cartoon__ (see e.g., `bsseq::BSmooth()` for a proper implementation)
+
+## Differentially methylated regions
+
+<center><img src="images/dmr-1.png" height="480px" /></center>
+
+__Cartoon__ (see e.g., `bsseq::BSmooth.tstat()` and `bsseq::dmrFinder()` for a proper implementation)
+
+## Differentially methylated regions
+
+<center><img src="images/dmr-2.png" height="480px" /></center>
+
+__Cartoon__ (see e.g., `bsseq::BSmooth.tstat()` and `bsseq::dmrFinder()` for a proper implementation)
+
+## Other downstream analyses
+
+__UP TO HERE__
+
+- Using methylation patterns, e.g, epialleles
 
 # Visualisation
 
@@ -321,19 +370,13 @@ Enrichment-based assays
 
 - Cell composition bias
 
-# Miscellaneous
+## Summary
 
-## Yup
-
-- Single-cell assays
-
-# Links
-
-## Yup
+## Links
 
 - Workflows
 - Package vignettes
-- Slides
+- These slides
 - Conferences (e.g., http://webspace.qmul.ac.uk/rlowe/450kworkshop//index.html)
 - [PH525x series - Biomedical Data Science](http://genomicsclass.github.io/book/)
 - [A comprehensive overview of Infinium HumanMethylation450 data processing](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4239800/)
@@ -345,14 +388,13 @@ CpG sites in the human genome (pdf)](http://www.tandfonline.com/doi/pdf/10.4161/
 ## TODOs
 
 - [ ] Include affiliation on title slide?
-- [ ] Note that this is an opinionated talk
 - [ ] Add authors to key packages?
+- [ ] Check definitions of beta-values and M-values
 
-## Manual package curation
+## Manual package curation (BioC 3.1)
 
-__TODO: Working notes, not an actual slide__
+__TODO: Add links__
 
-## Key packages
 
 ### Microarrays
 
@@ -376,6 +418,16 @@ __TODO: Working notes, not an actual slide__
 - wateRmelon
 - __ANNOTATION__
 
+### Sequencing
+
+- BiSeq
+- bsseq
+- DMRcaller
+- DSS
+- M3D
+- methylPipe
+- MethylSeekR
+- MPFE
 
 ### Misc.
 
@@ -388,4 +440,4 @@ __TODO: Working notes, not an actual slide__
 - methyAnalysis (mostly arrays with some seq, same dev as lumi)
 - methylMnM (MeDIP-seq and MRE-seq)
 - Repitools (MeDIP-seq)
-- RnBeads (box and dice, slick pipeline run with "modules", uses other packages)
+- RnBeads (slick pipeline run with "modules", builds on other packages)
