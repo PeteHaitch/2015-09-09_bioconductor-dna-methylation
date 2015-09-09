@@ -37,7 +37,7 @@ Modified "<a href="https://commons.wikimedia.org/wiki/File:Cytosine_becomes_thym
 Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylation. The color and size of the dots represent tissue type (red/large – fallopian tube samples, n=8; black/small – ovarian tumors, n=489). 
 </div>
 
-## Sodium bisulfite treatment of DNA {.flexbox .vcenter .build}
+## Sodium bisulfite treatment of DNA {.flexbox .vcenter}
 
 <center><img src="images/bisulfite-conversion.png" height="480px" /></center>
 
@@ -53,12 +53,15 @@ Going to focus on contemporary high-throughput assays based on __sodium bisulfit
 
 - Illumina 27k
 - Illumina 450k
+- Human only (mostly)
 
 ### Sequencing
 
 - Whole-genome bisulfite-sequencing (WGBS/BS-seq/methylC-seq)
-- (Enhanced/Extended) Reduced representation bisulfite-sequencing (eRRBS/RRBS)
-- Capture + bisulfite-sequencing (Roche SeqCap Epi system)
+- Targeted methods
+    - (Enhanced/Extended) Reduced representation bisulfite-sequencing (eRRBS/RRBS)
+    - Capture + bisulfite-sequencing (Roche SeqCap Epi system)
+- Any organism (mostly)
     
 ## Non-bisulfite assays
 
@@ -144,7 +147,7 @@ __Will tell you:__
 
 </div>
 
-## Key packages
+## Key Bioconductor packages {.build}
 
 ### Powerhouses
 
@@ -171,9 +174,12 @@ __Will tell you:__
 
 ## Pre-processing
 
-__Very important__
+### __Very important__
 
-See [A comprehensive overview of Infinium HumanMethylation450 data processing (2013)](http://bib.oxfordjournals.org/content/15/6/929.long), [minfi User's Guide](http://www.bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.pdf)
+See: 
+
+- [A comprehensive overview of Infinium HumanMethylation450 data processing (2013)](http://bib.oxfordjournals.org/content/15/6/929.long)
+- [minfi User's Guide](http://www.bioconductor.org/packages/release/bioc/vignettes/minfi/inst/doc/minfi.pdf)
 
 ## Quality control
 
@@ -208,10 +214,6 @@ See [A comprehensive overview of Infinium HumanMethylation450 data processing (2
 - Type I and II probes are very different
 - CpG-SNPs
 
-### Methylation-specific(ish) issues
-
-- Cell composition artefacts
-
 ## Pre-processing {.build}
 
 - Several pre-processing options available in Bioconductor packages and some comparisons published e.g., [wateRmelon](http://bioconductor.org/packages/wateRmelon/)
@@ -222,7 +224,6 @@ See [A comprehensive overview of Infinium HumanMethylation450 data processing (2
     - `detectionP()`
     - `preprocessRaw()`, `preprocessIllumina()`, `preprocessQuantile()`, `preprocessNoob()`,  `preprocessSWAN()`, `preprocessFunnorm()`
     - `dropLociWithSnps()`
-    - `estimateCellCounts()`
 - [_RUVm_ (remove unwanted variation)](http://www.bioconductor.org/packages/release/bioc/vignettes/missMethyl/inst/doc/missMethyl.pdf) implemented in [_missMethyl_](http://bioconductor.org/packages/missMethyl/)
 - [_CopyNumber450k_](http://bioconductor.org/packages/CopyNumber450k/)
 
@@ -234,9 +235,7 @@ $\beta = \frac{M}{M + U + 100} \in [0, 1]$
 
 $\mathcal{M} = \log(\frac{M + 1}{U + 1}) \in [-\infty, \infty]$
 
-[Du, P. et al. Comparison of Beta-value and M-value methods for quantifying methylation levels by microarray analysis. BMC Bioinformatics 11, 587 (2010).](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3012676/):
-
-> "We recommend using the $\mathcal{M}$-value method for conducting differential methylation analysis and including the $\beta$-value statistics when reporting the results to investigators."
+> "We recommend using the $\mathcal{M}$-value method for conducting differential methylation analysis and including the $\beta$-value statistics when reporting the results to investigators." ([Du, P. et al. BMC Bioinformatics 11, 587 (2010)](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3012676/))
 
 ## Differential methylation {.build}
 
@@ -265,34 +264,32 @@ $\mathcal{M} = \log(\frac{M + 1}{U + 1}) \in [-\infty, \infty]$
 
 ### What these measure
 
-Single-base resolution of cytosine methylation
+Single-base resolution data of cytosine methylation
 
 ### Whole-genome bisulfite-sequencing
 
 - Gold standard
-- Genome-wide assay
+- Genome-wide assay (~25,000,000 CpGs in human)
 - Expensive
 - 2-30x sequencing coverage
 
 ### Targeted bisulfite-sequencing
 
-- Reduce representation bisulfite-sequencing and SeqCap
+- Reduced representation bisulfite-sequencing and SeqCap
 - Cheaper
 - 20-60x sequencing coverage
 
-## Key packages {.build}
+## Key Bioconductor packages {.build}
 
 Still being figured out ...
-
-[__Review__: Robinson, M. D. et al. Statistical methods for detecting differentially methylated loci and regions. Front. Genet. 5, 324 (2014).](http://www.ncbi.nlm.nih.gov/pubmed/25278959)
-
-There are also non-R/Bioconductor options
 
 ### __OPINION__
 
 - [_bsseq_](http://bioconductor.org/packages/bsseq/) for whole-genome bisulfite-sequencing
 - [_BiSeq_](http://bioconductor.org/packages/BiSeq/) for reduced representation bisulfite-sequencing
 - [_RnBeads_](http://bioconductor.org/packages/BiSeq/) for comprehensive WGBS/RRBS pipeline
+
+There are also non-R/Bioconductor options
 
 ## Non-R preliminaries {.build}
 
@@ -323,6 +320,10 @@ chr7 685 12 0
 - CpGs overlapping genetic variants
 - Copy number variation
 - Normalisation (nothing much yet available)
+
+## Downstream analyses with bisulfite-sequencing data {.center}
+
+What you can do with a microarray __plus more__
 
 ## Smoothing $\beta$-values {.smaller}
 
@@ -365,9 +366,9 @@ __Cartoon__ (see e.g., `bsseq::BSmooth.tstat()` and `bsseq::dmrFinder()` for a p
     
 # General issues
 
-## Batch effects and unwanted variation
+## Batch effects and unwanted variation {.build}
 
-__Yes, they affect DNA methylation data__
+__Yes, they affect DNA methylation data!__
 
 - [Introduction to batch effects](http://www.ncbi.nlm.nih.gov/pubmed/20838408)
 
@@ -379,7 +380,8 @@ __Yes, they affect DNA methylation data__
 ### Cell-type heterogeneity
 
 - [Jaffe, A. E. & Irizarry, R. A. Accounting for cellular heterogeneity is critical in epigenome-wide association studies. Genome Biol. 15, R31 (2014).](http://www.ncbi.nlm.nih.gov/pubmed/24495553)
-    - [_RnBeads_](http://bioconductor.org/packages/RnBeads/): See [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/RnBeads/inst/doc/RnBeads.pdf) for 
+    - `minfi::estimateCellCounts()`
+    - [_RnBeads_](http://bioconductor.org/packages/RnBeads/): See [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/RnBeads/inst/doc/RnBeads.pdf) for details
 
 ## Visualisation: [_coMET_](http://bioconductor.org/packages/coMET/)
 
@@ -408,26 +410,33 @@ Check out [_AnnotationHub_](http://bioconductor.org/packages/AnnotationHub/)
 ### Sequencing
 
 - More work done outside of R/Bioconductor
-    - __OPINION__: Move to Bioconductor for exploratory data analysis, inference, visualisation, and integration.
+- __OPINION__: Move to Bioconductor for exploratory data analysis, inference, visualisation, and integration.
     
 ### Technical biases are rife
 
 - Careful experimental design and a skeptical mind are key
 
-## Links
+## Links {.smaller}
 
-__TODO__
+### Slides
 
-- Workflows
-- Package vignettes
-- These slides
-- Conferences (e.g., http://webspace.qmul.ac.uk/rlowe/450kworkshop//index.html)
-- [PH525x series - Biomedical Data Science](http://genomicsclass.github.io/book/)
+- [bit.ly/BioC-DNAm](https://github.com/PeteHaitch/2015-09-09_bioconductor-dna-methylation) (or visit my GitHub page, [https://github.com/PeteHaitch/](https://github.com/PeteHaitch/))
+
+### Online Bioconductor courses
+
+- [Coursera (Johns Hopkins)](https://www.coursera.org/course/genbioconductor) and [edX (Harvard)](http://genomicsclass.github.io/book/)
+
+### Conference material
+
+- [450k workshop](http://webspace.qmul.ac.uk/rlowe/450kworkshop//index.html)
+
+### Papers
+
+- [_minfi_](http://www.ncbi.nlm.nih.gov/pubmed/24478339) and [_bsseq_](http://www.ncbi.nlm.nih.gov/pubmed/23034175)
 - [A comprehensive overview of Infinium HumanMethylation450 data processing](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4239800/)
-- [Evaluation of the Infinium Methylation 450K technology](http://www.ncbi.nlm.nih.gov/pubmed/22126295)
-- [Validation of a DNA methylation microarray for 450,000
-CpG sites in the human genome (pdf)](http://www.tandfonline.com/doi/pdf/10.4161/epi.6.6.16196)
-- [https://www.coursera.org/course/genbioconductor](https://www.coursera.org/course/genbioconductor)
+- [DNA methylome analysis using short bisulfite sequencing data. Nat. Methods](http://www.ncbi.nlm.nih.gov/pubmed/22290186)
+- [Methodological aspects of whole-genome bisulfite sequencing analysis (__paywalled__)](http://www.ncbi.nlm.nih.gov/pubmed/24867940)
+- [Statistical methods for detecting differentially methylated loci and regions](http://www.ncbi.nlm.nih.gov/pubmed/25278959)
 
 # Notes
 
@@ -469,7 +478,7 @@ __WARNING: The remaining 'slides' are notes and are not part of the presentation
 - MethylSeekR
 - MPFE
 
-### Misc. {.smaller}
+## Misc. {.smaller}
 
 - bumphunter (general)
 - coMET (visualisation of EWAS and 'co-methylation LD maps')
