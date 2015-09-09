@@ -41,7 +41,7 @@ Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylati
 
 <center><img src="images/bisulfite-conversion.png" height="480px" /></center>
 
-__TODO: Image source and note hydroxy__
+[Adapted from Krueger, F., et al., Nat. Methods 9, 145–151 (2012).](http://www.ncbi.nlm.nih.gov/pubmed/22290186)
 
 # Assays
 
@@ -232,7 +232,7 @@ See [A comprehensive overview of Infinium HumanMethylation450 data processing (2
 
 $\beta = \frac{M}{M + U + 100} \in [0, 1]$
 
-$\mathcal{M} = \log(\frac{M}{U}) \in [-\infty, \infty]$
+$\mathcal{M} = \log(\frac{M + 1}{U + 1}) \in [-\infty, \infty]$
 
 [Du, P. et al. Comparison of Beta-value and M-value methods for quantifying methylation levels by microarray analysis. BMC Bioinformatics 11, 587 (2010).](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3012676/):
 
@@ -284,12 +284,15 @@ Single-base resolution of cytosine methylation
 
 Still being figured out ...
 
+[__Review__: Robinson, M. D. et al. Statistical methods for detecting differentially methylated loci and regions. Front. Genet. 5, 324 (2014).](http://www.ncbi.nlm.nih.gov/pubmed/25278959)
+
+There are also non-R/Bioconductor options
+
 ### __OPINION__
 
 - [_bsseq_](http://bioconductor.org/packages/bsseq/) for whole-genome bisulfite-sequencing
 - [_BiSeq_](http://bioconductor.org/packages/BiSeq/) for reduced representation bisulfite-sequencing
 - [_RnBeads_](http://bioconductor.org/packages/BiSeq/) for comprehensive WGBS/RRBS pipeline
-- Other non-R/Bioconductor options __TODO: Ref Mark's paper__
 
 ## Non-R preliminaries {.build}
 
@@ -347,32 +350,73 @@ __Cartoon__ (see e.g., `bsseq::BSmooth.tstat()` and `bsseq::dmrFinder()` for a p
 
 ## Other downstream analyses
 
-__UP TO HERE__
+### Epigenome segmentation
 
-- Using methylation patterns, e.g, epialleles
+- [_MethylSeekR_](http://bioconductor.org/packages/MethylSeekR/)
 
-# Visualisation
+### Using methylation patterns
 
-## Yup
+- [Methylation entropy](http://www.ncbi.nlm.nih.gov/pubmed/21278160)
+- [Allele-specific methylation](http://www.ncbi.nlm.nih.gov/pubmed/22523239)
+    - Most methods based on SNPs rather than methylation patterns
+- [Epialleles](http://www.ncbi.nlm.nih.gov/pubmed/25260792)
+    - [_MPFE_](http://bioconductor.org/packages/MPFE/)
+    - [_MethylationTuples_ (https://github.com/PeteHaitch/MethylationTuples)](https://github.com/PeteHaitch/MethylationTuples)
+    
+# General issues
 
-- epiviz
-- lollipop plots
+## Batch effects and unwanted variation
 
-# Data integration
+__Yes, they affect DNA methylation data__
 
-## Yup 
+- [Introduction to batch effects](http://www.ncbi.nlm.nih.gov/pubmed/20838408)
 
-- AnnotationHub, biomaRt, etc.
+### Methods better developed for microarray methylation data
 
-# Batch effects and technical biases
+- [_sva_](http://bioconductor.org/packages/sva/): General methods for removing batch effects and other unwanted variation in high-throughput experiments.
+- [_missMethyl_](http://bioconductor.org/packages/sva/): Includes `RUVadj()` and `RUVfit()` specific to 450k data.
 
-## Yup
+### Cell-type heterogeneity
 
-- Cell composition bias
+- [Jaffe, A. E. & Irizarry, R. A. Accounting for cellular heterogeneity is critical in epigenome-wide association studies. Genome Biol. 15, R31 (2014).](http://www.ncbi.nlm.nih.gov/pubmed/24495553)
+    - [_RnBeads_](http://bioconductor.org/packages/RnBeads/): See [vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/RnBeads/inst/doc/RnBeads.pdf) for 
 
-## Summary
+## Visualisation: [_coMET_](http://bioconductor.org/packages/coMET/)
+
+<center><img src="images/coMET.png" height=550px" /></center>
+
+## Visualisation: [_epivizr_](http://bioconductor.org/packages/epivizr/)
+
+<center><img src="images/epivizr.png" height=480px" /></center>
+
+[http://bit.ly/epivizr (YouTube intro)](http://bit.ly/epivizr)
+
+## Data integration
+
+Check out [_AnnotationHub_](http://bioconductor.org/packages/AnnotationHub/)
+
+## Summary {.build}
+
+- Bioconductor contains many packages for analysing DNA methylation data
+    - Explore these using [BiocViews](http://www.bioconductor.org/packages/release/BiocViews.html)
+
+### Microarray
+
+- Analysis pipeline is well-established
+- __OPINION__: Start with [_minfi_](http://bioconductor.org/packages/minfi/)
+
+### Sequencing
+
+- More work done outside of R/Bioconductor
+    - __OPINION__: Move to Bioconductor for exploratory data analysis, inference, visualisation, and integration.
+    
+### Technical biases are rife
+
+- Careful experimental design and a skeptical mind are key
 
 ## Links
+
+__TODO__
 
 - Workflows
 - Package vignettes
@@ -385,18 +429,15 @@ __UP TO HERE__
 CpG sites in the human genome (pdf)](http://www.tandfonline.com/doi/pdf/10.4161/epi.6.6.16196)
 - [https://www.coursera.org/course/genbioconductor](https://www.coursera.org/course/genbioconductor)
 
-## TODOs
+# Notes
 
-- [ ] Include affiliation on title slide?
-- [ ] Add authors to key packages?
-- [ ] Check definitions of beta-values and M-values
+## Warning 
+
+__WARNING: The remaining 'slides' are notes and are not part of the presentation__
 
 ## Manual package curation (BioC 3.1)
 
-__TODO: Add links__
-
-
-### Microarrays
+## Microarrays {.smaller}
 
 - BEclear (batch effects)
 - ChAMP
@@ -416,9 +457,8 @@ __TODO: Add links__
 - shinyMethyl
 - skewr
 - wateRmelon
-- __ANNOTATION__
 
-### Sequencing
+## Sequencing {.smaller}
 
 - BiSeq
 - bsseq
@@ -429,7 +469,7 @@ __TODO: Add links__
 - MethylSeekR
 - MPFE
 
-### Misc.
+### Misc. {.smaller}
 
 - bumphunter (general)
 - coMET (visualisation of EWAS and 'co-methylation LD maps')
