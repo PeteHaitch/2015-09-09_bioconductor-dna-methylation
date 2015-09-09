@@ -45,7 +45,7 @@ Figure S7.1C. Scatterplots showing AMT gene expression versus promoter methylati
 
 # Assays
 
-## Bisulfite-based assays {.build}
+## Bisulfite-based assays {.build .smaller}
 
 Going to focus on contemporary high-throughput assays based on __sodium bisulfite treatment of DNA__
 
@@ -251,11 +251,6 @@ $\mathcal{M} = \log(\frac{M + 1}{U + 1}) \in [-\infty, \infty]$
 - __OPINION__: DMR finding/testing is somewhat _ad hoc_, but getting better
 - E.g., see `minfi::blockFinder()` with the `bumphunter::bumphunter()` backend
 
-## Differential variability
-
-- For a given probe, are the within-group variances of methylation levels different?
-- `missMethyl::varFit`, `missMethyl::topVar()` based on [_limma_](http://bioconductor.org/packages/limma/)
-
 # Sequencing
 
 ## Description of assays
@@ -387,16 +382,6 @@ __Yes, they affect DNA methylation data!__
 
 <center><img src="images/coMET.png" height=550px" /></center>
 
-## Visualisation: [_epivizr_](http://bioconductor.org/packages/epivizr/)
-
-<center><img src="images/epivizr.png" height=480px" /></center>
-
-[http://bit.ly/epivizr (YouTube intro)](http://bit.ly/epivizr)
-
-## Data integration
-
-Check out [_AnnotationHub_](http://bioconductor.org/packages/AnnotationHub/)
-
 ## Summary {.build}
 
 - Bioconductor contains many packages for analysing DNA methylation data
@@ -490,3 +475,18 @@ __WARNING: The remaining 'slides' are notes and are not part of the presentation
 - methylMnM (MeDIP-seq and MRE-seq)
 - Repitools (MeDIP-seq)
 - RnBeads (slick pipeline run with "modules", builds on other packages)
+
+## Differential variability
+
+- For a given probe, are the within-group variances of methylation levels different?
+- `missMethyl::varFit`, `missMethyl::topVar()` based on [_limma_](http://bioconductor.org/packages/limma/)
+
+## Visualisation: [_epivizr_](http://bioconductor.org/packages/epivizr/)
+
+<center><img src="images/epivizr.png" height=480px" /></center>
+
+[http://bit.ly/epivizr (YouTube intro)](http://bit.ly/epivizr)
+
+## Data integration
+
+Check out [_AnnotationHub_](http://bioconductor.org/packages/AnnotationHub/)
